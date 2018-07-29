@@ -3,8 +3,8 @@
 {% block title %}{{ object.userprofile.display_name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
 {% block container_class %}userprofile{% endblock %}
 {% block content %}
-<section class="wafer wafer-profile">
-  {% with profile=object.userprofile %}
+{% with profile=object.userprofile %}
+  <section class="wafer-profile-bio">
     <div class="row">
       <div class="col-md-2" id="profile-avatar">
         {% with profile.avatar_url as avatar_url %}
@@ -94,8 +94,10 @@
         {% endif %}
       {% endif %}
     {% endif %}
-    {# Accepted talks are globally visible #}
-    {% if profile.accepted_talks.exists %}
+  </section>
+  {# Accepted talks are globally visible #}
+  {% if profile.accepted_talks.exists %}
+    <section class="wafer-profile-talks wafer-profile-talks-accepted">
       <h2>{% trans 'Accepted Talks:' %}</h2>
       {% for talk in profile.accepted_talks %}
         <div class="card">
@@ -109,8 +111,10 @@
           </div>
         </div>
       {% endfor %}
-    {% endif %}
-    {% if profile.cancelled_talks.exists %}
+    </section>
+  {% endif %}
+  {% if profile.cancelled_talks.exists %}
+    <section class="wafer-profile-talks wafer-profile-talks-cancelled">
       <h2>{% trans 'Cancelled Talks:' %}</h2>
       {% for talk in profile.cancelled_talks %}
         <div class="card">
@@ -124,8 +128,10 @@
           </div>
         </div>
       {% endfor %}
-    {% endif %}
-    {% if profile.provisional_talks.exists %}
+    </section>
+  {% endif %}
+  {% if profile.provisional_talks.exists %}
+    <section class="wafer-profile-talks wafer-profile-talks-provisional">
       <h2>{% trans 'Provisionally Accepted Talks:' %}</h2>
       {% for talk in profile.provisional_talks %}
         <div class="card">
@@ -139,10 +145,12 @@
           </div>
         </div>
       {% endfor %}
-    {% endif %}
-    {# Submitted talk proposals are only visible to the owner #}
-    {% if can_edit %}
-      {% if profile.pending_talks.exists %}
+    </section>
+  {% endif %}
+  {# Submitted talk proposals are only visible to the owner #}
+  {% if can_edit %}
+    {% if profile.pending_talks.exists %}
+      <section class="wafer-profile-talks wafer-profile-talks-submitted">
         <h2>{% trans 'Submitted or Under Consideration Talks:' %}</h2>
         {% for talk in profile.pending_talks %}
           <div class="card">
@@ -166,10 +174,10 @@
             </div>
           </div>
         {% endfor %}
-      {% endif %}
+      </section>
     {% endif %}
-  {% endwith %}
-</section>
+  {% endif %}
+{% endwith %}
 {% endblock %}
 {% block extra_foot %}
 <script type="text/javascript">
